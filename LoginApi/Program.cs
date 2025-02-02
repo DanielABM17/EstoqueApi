@@ -77,15 +77,10 @@ void InitializeDatabase(IServiceProvider services)
 {
     using var scope = services.CreateScope();
     var database = scope.ServiceProvider.GetRequiredService<IMongoDatabase>();
-
-    // Ensure indexes or initial data here
     var storesCollection = database.GetCollection<Store>("Stores");
-
-    // Create a unique index on StoreCode
     var indexKeysDefinition = Builders<Store>.IndexKeys.Ascending(s => s.StoreCode);
     var indexOptions = new CreateIndexOptions { Unique = true };
     var indexModel = new CreateIndexModel<Store>(indexKeysDefinition, indexOptions);
     storesCollection.Indexes.CreateOne(indexModel);
-
-    // Add any initial data if necessary
+  
 }
